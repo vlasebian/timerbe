@@ -10,6 +10,8 @@ const io = require('socket.io')(http);
 const nedb = require('nedb');
 const dayjs = require('dayjs');                                               
 
+const port = process.env.PORT || 3000;
+
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(cors());
@@ -253,4 +255,4 @@ io.on('connection', socket => {
 //   io.emit(message);
 // });
 
-http.listen(3000);
+http.listen(port);
