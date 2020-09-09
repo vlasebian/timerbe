@@ -4,7 +4,7 @@
   "description": "Simple centralized timer.",
   "main": "index.js",
   "engines": {
-      "node": "12.x"
+      "node": "10.x"
   },
   "scripts": {
     "start": "node index.js"
