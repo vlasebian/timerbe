@@ -255,4 +255,9 @@ io.on('connection', socket => {
 //   io.emit(message);
 // });
 
+
+app.get('/', (req, res, err) => {
+    res.status(200).json({ message: 'TimerBE is running!' });
+});
+
 http.listen(port);
