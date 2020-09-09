@@ -1,19 +1,26 @@
 {
   "name": "timer-be",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple centralized timer.",
   "main": "index.js",
+  "engines": {
+      "node": "12.x"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@types/socket.io": "^2.1.11",
     "cors": "^2.8.5",
+    "dayjs": "^1.8.35",
     "express": "^4.17.1",
-    "moment": "^2.27.0",
     "nedb": "^1.8.0",
     "socket.io": "^2.3.0"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/vlasebian/timerbe"
   }
 }

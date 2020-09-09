@@ -8,7 +8,7 @@ const io = require('socket.io')(http);
 // const jwks = require('jwks-rsa');
 const cors = require('cors');
 const nedb = require('nedb');
-const moment = require('moment');                                               
+const dayjs = require('dayjs');                                               
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -81,8 +81,8 @@ io.on('connection', socket => {
                 return;
             }
 
-            let pauseddate = moment().toISOString();
-            let enddate = moment()
+            let pauseddate = dayjs().toISOString();
+            let enddate = dayjs()
                     .add(duration.d, 'd')
                     .add(duration.h, 'h')
                     .add(duration.m, 'm')
@@ -133,8 +133,8 @@ io.on('connection', socket => {
                 return;
             }
             
-            let enddate = moment(doc.enddate)
-                            .add(moment().diff(moment(doc.pauseddate)))
+            let enddate = dayjs(doc.enddate)
+                            .add(dayjs().diff(dayjs(doc.pauseddate)))
                             .toISOString();
 
             timers.update(
@@ -172,7 +172,7 @@ io.on('connection', socket => {
 
             timers.update(
                 { 'event': eventName },
-                { $set: { 'state': PAUSED, 'pauseddate': moment().toISOString() } },
+                { $set: { 'state': PAUSED, 'pauseddate': dayjs().toISOString() } },
                 { multi: false, upsert: false, returnUpdatedDocs: true },
                 (err, count, doc, upsert) => {
                     socket.emit('timer', {
