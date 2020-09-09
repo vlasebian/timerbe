@@ -1,20 +1,12 @@
 'use strict';
 
 const app = require('express')();
-//const bodyParser = require('body-parser');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-// const jwt = require('express-jwt');
-// const jwks = require('jwks-rsa');
-//const cors = require('cors');
 const nedb = require('nedb');
 const dayjs = require('dayjs');                                               
 
 const port = process.env.PORT || 8080;
-
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(cors());
 
 // Setup persistent database with automatic loading.
 const timers = new nedb({ filename: './timers.db', autoload: true });
@@ -51,7 +43,7 @@ io.on('connection', socket => {
             }
 
             // Return requested timer data.
-            socket.emit('timer', {
+            io.emit('timer', {
                 'state': doc.state,
                 'enddate': doc.enddate,
             });
@@ -104,7 +96,7 @@ io.on('connection', socket => {
                 { multi: false, upsert: true, returnUpdatedDocs: true },
                 (err, count, doc, upsert) => {
                     // Return requested timer data.
-                    socket.emit('timer', {
+                    io.emit('timer', {
                         'state': doc.state,
                         'enddate': doc.enddate,
                     });
@@ -144,7 +136,7 @@ io.on('connection', socket => {
                 { $set: { 'state': ACTIVE, 'enddate': enddate } },
                 { multi: false, upsert: false, returnUpdatedDocs: true },
                 (err, count, doc, upsert) => {
-                    socket.emit('timer', {
+                    io.emit('timer', {
                         'state': doc.state,
                         'enddate': doc.enddate,
                     });
@@ -177,7 +169,7 @@ io.on('connection', socket => {
                 { $set: { 'state': PAUSED, 'pauseddate': dayjs().toISOString() } },
                 { multi: false, upsert: false, returnUpdatedDocs: true },
                 (err, count, doc, upsert) => {
-                    socket.emit('timer', {
+                    io.emit('timer', {
                         'state': doc.state,
                         'enddate': doc.enddate,
                     });
@@ -207,7 +199,7 @@ io.on('connection', socket => {
                 { $set: { 'state': UNDEFINED, 'enddate': '', 'pauseddate': '' } },
                 { multi: false, upsert: false, returnUpdatedDocs: true },
                 (err, count, doc, upsert) => {
-                    socket.emit('timer', {
+                    io.emit('timer', {
                         'state': doc.state,
                         'enddate': doc.enddate,
                     });
@@ -218,46 +210,10 @@ io.on('connection', socket => {
     
 });
 
-  // let previousId;
-  // const safeJoin = currentId => {
-  //   socket.leave(previousId);
-  //   socket.join(currentId);
-  //   previousId = currentId;
-  // };
-
-  // socket.on("getDoc", docId => {
-  //   safeJoin(docId);
-  //   socket.emit("document", documents[docId]);
-  // });
-
-  // socket.on("addDoc", doc => {
-  //   documents[doc.id] = doc;
-  //   safeJoin(doc.id);
-  //   io.emit("documents", Object.keys(documents));
-  //   socket.emit("document", doc);
-  // });
-
-  // socket.on("editDoc", doc => {
-  //   documents[doc.id] = doc;
-  //   socket.to(doc.id).emit("document", doc);
-  // });
-
-  // io.emit("documents", Object.keys(documents));
-
-
-// // socket.io setup.
-// io.on('connection', (socket) => {
-//     console.log('user connected');
-// });
-
-// // Listen for messages. Send back messages to all the connected users.
-// io.on('new-message', (message) => {
-//   io.emit(message);
-// });
-
-
 app.get('/', (req, res, err) => {
     res.status(200).json({ message: 'TimerBE is running!' });
 });
 
-http.listen(port);
+http.listen(port, () => {
+    console.log('TimerBE is running...')
+});
