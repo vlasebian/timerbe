@@ -1,18 +1,18 @@
 'use strict';
 
 const app = require('express')();
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 // const jwt = require('express-jwt');
 // const jwks = require('jwks-rsa');
-const cors = require('cors');
+//const cors = require('cors');
 const nedb = require('nedb');
 const dayjs = require('dayjs');                                               
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cors());
 
 // Setup persistent database with automatic loading.
 const timers = new nedb({ filename: './timers.db', autoload: true });
